@@ -19,7 +19,7 @@ const driver = neo4j.driver(
   neo4j.auth.basic(auradsUsername, auradsPassword)
 );
 
-// get airport code
+// get airport code from the endpoint
 app.get('/api/data/airport', async (req, res) => {
     const session = driver.session()
     
