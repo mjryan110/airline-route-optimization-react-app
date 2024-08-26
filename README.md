@@ -1,70 +1,53 @@
-# Getting Started with Create React App
+# ✈️ Airline Route Optimization with Neo4j and Graph Data Science
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This React App offers a solution to optimize airline routes based on available flight hours using Neo4j's Graph Data Science (GDS) library.
 
-## Available Scripts
+Imagine you're a pilot with only 15 working hours left for the week. How do you maximize your earnings? Sure, you could manually search for the most lucrative routes, but why settle for guesswork? This notebook automates the process, providing an optimal flight schedule that tells you exactly which routes to fly to make the most out of your remaining time.
 
-In the project directory, you can run:
+> **Current Status:**  
+> The application is being actively updated. Right now, you can enter desired airport codes, and it will filter down the codes from the Neo4j database.
 
-### `npm start`
+### 🛠 How It Works
+- **Yen's K-Shortest Path Algorithm** is employed to identify multiple shortest paths between airports.
+- Users can input any number of airport codes, and the notebook will generate the possible routes.
+- A **linear programming** step at the end calculates the optimal path, maximizing earnings while considering the time constraints.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🚀 Setup
 
-### `npm test`
+To get started, you'll need a Neo4j instance with Graph Data Science installed:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. **Option 1:** [Get started with AuraDS](https://neo4j.com/product/auradb/)
+2. **Option 2:** Download and install [Neo4j Desktop with GDS](https://neo4j.com/download/)
 
-### `npm run build`
+You will also need to install some python libraries:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. `graphdatascience`
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+    ```
+    pip install graphdatascience
+    ```
+2. `pulp`
+    ```
+    pip install pulp
+    ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Once your database is up and running, you can proceed to configure the notebook.
 
-### `npm run eject`
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 📓 Usage Instructions
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. **Configure Neo4j Settings:**  
+   Open the notebook and update the Neo4j connection settings with your `HOST`, `USERNAME`, and `PASSWORD` to connect your database.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+2. **Load Your Data:**  
+   After configuring the connection, load your dataset into the Neo4j environment.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+3. **Run the Notebook:**  
+   Execute the cells to find the optimal flight routes based on your inputs and constraints.
 
-## Learn More
+Enjoy exploring optimized routes and maximizing your value!
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+---
