@@ -37,16 +37,6 @@ const AirportPage = () => {
         }
     };
 
-    // // Handle submitting the list and filtering airports
-    // const handleSubmit = () => {
-    //     if (selectedCodes.length > 0) {
-    //         const filtered = airports.filter(airport =>
-    //             selectedCodes.includes(airport.code)
-    //         );
-    //         setFilteredAirports(filtered);
-    //     }
-    // };
-
     const handleSubmit = async () => {
         if (selectedCodes.length > 0) {
             // Filter the airports to display only the selected ones

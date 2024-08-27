@@ -37,7 +37,7 @@ driver = GraphDatabase.driver(uri=HOST,auth=(USERNAME, PASSWORD))
 
 def main():
     # The selected airport codes will be passed as command-line arguments
-    selected_codes = sys.argv[1:]
+    selected_codes = sys.argv[1:]  
 
     processed_codes = []
 
@@ -193,7 +193,22 @@ problem += lpSum([dfLP['totalDuration'][i] * x[i] for i in range(len(dfLP))]) <=
 solver = PULP_CBC_CMD(msg=False)
 problem.solve(solver)
 
-# Print the selected route
+# Initialize variables to store the best route
+max_value_route = None
+max_value = 0
+max_duration = 0
+
+# Iterate through results to find the route with the maximum value
 for i in range(len(dfLP)):
     if x[i].value() == 1:
-        print(f"Selected Route: {dfLP['nodeNames'][i]} with Total Value: {dfLP['totalValue'][i]}, Total Duration: {dfLP['totalDuration'][i]}")
+        route_value = dfLP['totalValue'][i]
+        if route_value > max_value:
+            max_value = route_value
+            max_value_route = dfLP['nodeNames'][i]
+            max_duration = dfLP['totalDuration'][i]
+
+# Print the selected route with the maximum value
+if max_value_route:
+    print(f"Selected Route with Maximum Value: {max_value_route} with Total Value: {max_value}, Total Duration: {max_duration}")
+else:
+    print("No route found that meets the constraints.")
