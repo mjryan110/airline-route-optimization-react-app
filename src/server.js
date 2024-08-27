@@ -51,7 +51,7 @@ app.post('/api/submit-airports', async (req, res) => {
 
     try {
         // Spawn the Python script process and pass the selectedCodes as arguments
-        const pythonProcess = spawn('python3', ['../test.py', ...selectedCodes]);
+        const pythonProcess = spawn('python3', ['../route-optimizer.py', ...selectedCodes]);
 
         // Capture the output from the Python script
         pythonProcess.stdout.on('data', (data) => {
