@@ -37,15 +37,45 @@ const AirportPage = () => {
         }
     };
 
-    // Handle submitting the list and filtering airports
-    const handleSubmit = () => {
+    // // Handle submitting the list and filtering airports
+    // const handleSubmit = () => {
+    //     if (selectedCodes.length > 0) {
+    //         const filtered = airports.filter(airport =>
+    //             selectedCodes.includes(airport.code)
+    //         );
+    //         setFilteredAirports(filtered);
+    //     }
+    // };
+
+    const handleSubmit = async () => {
         if (selectedCodes.length > 0) {
+            // Filter the airports to display only the selected ones
             const filtered = airports.filter(airport =>
                 selectedCodes.includes(airport.code)
             );
             setFilteredAirports(filtered);
+    
+            // Submit the selected airport codes to the backend to trigger the Python script
+            try {
+                const response = await fetch('http://localhost:3001/api/submit-airports', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ selectedCodes })
+                });
+    
+                const result = await response.json();
+                console.log('Python script result:', result);
+    
+                // You can update the UI with the result from the Python script if needed
+                // For example, set some state to display the result to the user
+            } catch (error) {
+                console.error('Error submitting airport codes:', error);
+            }
         }
     };
+    
 
     // Handle clearing the selection and showing all airports
     const handleClear = () => {
