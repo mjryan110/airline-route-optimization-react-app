@@ -38,7 +38,7 @@ driver = GraphDatabase.driver(uri=HOST,auth=(USERNAME, PASSWORD))
 
 def main():
     # The selected airport codes will be passed as command-line arguments
-    selected_codes = sys.argv[1:]  
+    selected_codes = sys.argv[1:]
 
     processed_codes = []
 
@@ -64,8 +64,6 @@ orders = []
 
 for order in permutations_list:
     orders.append(list(('DFW',) + order))
-
-# print(orders)
 
 # Get all the adjacent pairs - source and dest but in a single list
 
