@@ -1,4 +1,3 @@
-// src/pages/AirportPage.js
 import React, { useEffect, useState } from 'react';
 // import MapComponent from '../components/MapComponent';
 
@@ -7,6 +6,7 @@ const AirportPage = () => {
     const [airportCode, setAirportCode] = useState('');
     const [selectedCodes, setSelectedCodes] = useState([]);
     const [filteredAirports, setFilteredAirports] = useState([]);
+    const [result, setResult] = useState(null); // State to hold the results
 
     useEffect(() => {
         // Fetch data from the Express server
@@ -56,10 +56,12 @@ const AirportPage = () => {
                 });
     
                 const result = await response.json();
-                console.log('Python script result:', result);
-    
-                // You can update the UI with the result from the Python script if needed
-                // For example, set some state to display the result to the user
+
+                if (result.error) {
+                    console.error('Error:', result.error);
+                } else {
+                    setResult(result); // Store the result in state to display it
+                }
             } catch (error) {
                 console.error('Error submitting airport codes:', error);
             }
@@ -71,6 +73,7 @@ const AirportPage = () => {
     const handleClear = () => {
         setSelectedCodes([]);
         setFilteredAirports(airports); // Reset to the original list
+        setResult(null); // Clear the result when clearing selections
     };
 
     return (
@@ -93,8 +96,15 @@ const AirportPage = () => {
                 <button onClick={handleClear} className="button">Clear</button>
             </div>
 
-            {/* Map Display - commented out until I get a better understanding of the map function */}
-            {/* <MapComponent selectedAirports={selectedCodes} /> */}
+            {/* Results Section */}
+            {result && (
+                <div className="results-section">
+                    <h2 className="subtitle">Selected Route Details:</h2>
+                    <p><strong>Route:</strong> {result.route.join(' → ')}</p>
+                    <p><strong>Total Value:</strong> {result.total_value}</p>
+                    <p><strong>Total Duration:</strong> {result.total_duration}</p>
+                </div>
+            )}
 
             {/* List of Selected Airport Codes */}
             {selectedCodes.length > 0 && (

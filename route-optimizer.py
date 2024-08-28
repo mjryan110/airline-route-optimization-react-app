@@ -6,6 +6,7 @@
 import numpy as np 
 import pandas as pd
 import os
+import json
 from itertools import permutations
 import itertools
 from neo4j import GraphDatabase
@@ -207,8 +208,23 @@ for i in range(len(dfLP)):
             max_value_route = dfLP['nodeNames'][i]
             max_duration = dfLP['totalDuration'][i]
 
-# Print the selected route with the maximum value
+# comment out to test new method
+# # Print the selected route with the maximum value
+# if max_value_route:
+#     print(f"Selected Route with Maximum Value: {max_value_route} with Total Value: {max_value}, Total Duration: {max_duration}")
+# else:
+#     print("No route found that meets the constraints.")
+
+# new method
 if max_value_route:
-    print(f"Selected Route with Maximum Value: {max_value_route} with Total Value: {max_value}, Total Duration: {max_duration}")
+    result = {
+        'route': max_value_route,
+        'total_value': max_value,
+        'total_duration': max_duration
+    }
+    print(json.dumps(result))
 else:
-    print("No route found that meets the constraints.")
+    result = {
+        'error': 'No route found that meets the constraints'
+    }
+    print(json.dumps(result))

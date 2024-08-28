@@ -53,9 +53,12 @@ app.post('/api/submit-airports', async (req, res) => {
         // Spawn the Python script process and pass the selectedCodes as arguments
         const pythonProcess = spawn('python3', ['../route-optimizer.py', ...selectedCodes]);
 
+        let scriptOutput = ''; // new code
+
         // Capture the output from the Python script
         pythonProcess.stdout.on('data', (data) => {
-            console.log(`Python script output: ${data}`);
+            scriptOutput += data.toString();
+            // console.log(`Python script output: ${data}`); commented out to test
         });
 
         // Handle error output from the Python script
@@ -63,17 +66,23 @@ app.post('/api/submit-airports', async (req, res) => {
             console.error(`Python script error: ${data}`);
         });
 
-        // Handle when the Python script process exits
+        // Handle when the python script process exits
         pythonProcess.on('close', (code) => {
             console.log(`Python script exited with code ${code}`);
-            res.json({ message: 'Python script triggered successfully', selectedCodes });
+
+            try {
+                const result = JSON.parse(scriptOutput);
+                res.json(result);
+            } catch (error) {
+                console.error('Error parsing Python script output:', error);
+                res.status(500).send('Internal Server Error');
+            }
         });
     } catch (error) {
         console.log('Error triggering Python script:', error);
         res.status(500).send('Internal Server Error');
     }
 });
-
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
