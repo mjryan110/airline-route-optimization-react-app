@@ -39,7 +39,7 @@ driver = GraphDatabase.driver(uri=HOST,auth=(USERNAME, PASSWORD))
 def main():
     # The selected airport codes will be passed as command-line arguments
     selected_codes = sys.argv[1:]
-
+    
     processed_codes = []
 
     for code in selected_codes:
@@ -58,12 +58,15 @@ if __name__ == "__main__":
 # Get all possible paths with starting at DFW and with the input destinations
 
 airports = processed_codes_array
-permutations_list = list(permutations(airports))
+starting_airport = airports[0]
+remaining_airports = airports[1:]
+
+permutations_list = list(permutations(remaining_airports))
 
 orders = []
 
 for order in permutations_list:
-    orders.append(list(('DFW',) + order))
+    orders.append([starting_airport] + list(order))
 
 # Get all the adjacent pairs - source and dest but in a single list
 

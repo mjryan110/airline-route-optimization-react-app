@@ -43,22 +43,32 @@ app.get('/api/data/airport', async (req, res) => {
 
 // Endpoint to submit selected airport codes and trigger Python script
 app.post('/api/submit-airports', async (req, res) => {
+    // get the selected airport codes
     const { selectedCodes } = req.body;
+    // get the starting airport code
+    const { startingAirportCode } = req.body;
+    console.log(selectedCodes)
+    console.log(startingAirportCode)
 
-    if (!selectedCodes || !Array.isArray(selectedCodes)) {
+    // combine the two with starting at the beginning
+    const allSelectedCodes = [startingAirportCode, ...selectedCodes]
+    console.log(allSelectedCodes)
+
+    if (!allSelectedCodes || !Array.isArray(allSelectedCodes)) {
         return res.status(400).send('Invalid request: selectedCodes is required and must be an array.');
     }
 
     try {
         // Spawn the Python script process and pass the selectedCodes as arguments
-        const pythonProcess = spawn('python3', ['../route-optimizer.py', ...selectedCodes]);
+        const pythonProcess = spawn('python3', ['../route-optimizer.py', ...allSelectedCodes]);
 
-        let scriptOutput = ''; // new code
+        let scriptOutput = '';
 
         // Capture the output from the Python script
         pythonProcess.stdout.on('data', (data) => {
             scriptOutput += data.toString();
-            // console.log(`Python script output: ${data}`); commented out to test
+            console.log(`Python script output: ${data}`);
+            console.log('scriptOutput:', scriptOutput)
         });
 
         // Handle error output from the Python script
@@ -73,6 +83,7 @@ app.post('/api/submit-airports', async (req, res) => {
             try {
                 const result = JSON.parse(scriptOutput);
                 res.json(result);
+                console.log('result:', result)
             } catch (error) {
                 console.error('Error parsing Python script output:', error);
                 res.status(500).send('Internal Server Error');
