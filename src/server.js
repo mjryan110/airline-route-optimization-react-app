@@ -47,8 +47,6 @@ app.post('/api/submit-airports', async (req, res) => {
     const { selectedCodes } = req.body;
     // get the starting airport code
     const { startingAirportCode } = req.body;
-    console.log(selectedCodes)
-    console.log(startingAirportCode)
 
     // combine the two with starting at the beginning
     const allSelectedCodes = [startingAirportCode, ...selectedCodes]
