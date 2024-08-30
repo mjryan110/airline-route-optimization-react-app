@@ -209,14 +209,6 @@ for i in range(len(dfLP)):
             max_value_route = dfLP['nodeNames'][i]
             max_duration = dfLP['totalDuration'][i]
 
-# comment out to test new method
-# # Print the selected route with the maximum value
-# if max_value_route:
-#     print(f"Selected Route with Maximum Value: {max_value_route} with Total Value: {max_value}, Total Duration: {max_duration}")
-# else:
-#     print("No route found that meets the constraints.")
-
-# new method
 if max_value_route:
     result = {
         'route': max_value_route,

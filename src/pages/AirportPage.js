@@ -8,6 +8,7 @@ const AirportPage = () => {
     const [filteredAirports, setFilteredAirports] = useState([]);
     const [result, setResult] = useState(null);
     const [startingAirportCode, setStartingAirportCode] = useState('');
+    const [durationLimit, setDurationLimit] = useState(null);
 
     useEffect(() => {
         const fetchAirportData = async () => {
@@ -28,6 +29,8 @@ const AirportPage = () => {
 
     const handleStartingInputChange = (e) => setStartingAirportCode(e.target.value.toUpperCase());
 
+    const handleDurationInputChange = (e) => setDurationLimit(e.target.value);
+
     const handleAddCode = () => {
         if (airportCode.trim() !== '' && !selectedCodes.includes(airportCode.toUpperCase())) {
             setSelectedCodes([...selectedCodes, airportCode.toUpperCase()]);
@@ -36,7 +39,7 @@ const AirportPage = () => {
     };
 
     const handleSubmit = async () => {
-        if (selectedCodes.length > 0 && startingAirportCode.trim() !== '') {
+        if (selectedCodes.length > 0 && startingAirportCode.trim() !== '' && durationLimit > 0) {
             const filtered = airports.filter(airport =>
                 selectedCodes.includes(airport.code)
             );
@@ -46,7 +49,7 @@ const AirportPage = () => {
                 const response = await fetch('http://localhost:3001/api/submit-airports', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ startingAirportCode, selectedCodes })
+                    body: JSON.stringify({ startingAirportCode, selectedCodes, durationLimit })
                 });
 
                 const result = await response.json();
@@ -67,6 +70,7 @@ const AirportPage = () => {
         setSelectedCodes([]);
         setFilteredAirports(airports);
         setResult(null);
+        setDurationLimit('');
     };
 
     return (
@@ -85,7 +89,17 @@ const AirportPage = () => {
                         className="input-field"
                     />
                 </div>
-
+                <div className="input-group">
+                    <label htmlFor="startingDurationInput" className="input-label">Duration Available (hours):</label>
+                    <input
+                        type="text"
+                        id="durationLimitInput"
+                        value={durationLimit}
+                        onChange={handleDurationInputChange}
+                        placeholder="E.g., 5"
+                        className="input-field"
+                    />
+                </div>
                 <div className="input-group">
                     <label htmlFor="airportInput" className="input-label">Add Airport Code:</label>
                     <input
