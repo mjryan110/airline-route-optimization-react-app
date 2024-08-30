@@ -57,7 +57,7 @@ if __name__ == "__main__":
 
 # Get all possible paths with starting at DFW and with the input destinations
 
-airports = processed_codes_array
+airports = processed_codes_array[:-1]
 starting_airport = airports[0]
 remaining_airports = airports[1:]
 
@@ -188,7 +188,7 @@ x = [LpVariable(f'x{i}', cat='Binary') for i in range(len(dfLP))]
 problem += lpSum([dfLP['totalValue'][i] * x[i] for i in range(len(dfLP))])
 
 # Constraint: Ensure total duration does not exceed a specified maximum
-max_duration = 14.25  # You can adjust this limit as needed
+max_duration = float(processed_codes_array[-1])  # You can adjust this limit as needed
 problem += lpSum([dfLP['totalDuration'][i] * x[i] for i in range(len(dfLP))]) <= max_duration
 
 # Solve the problem

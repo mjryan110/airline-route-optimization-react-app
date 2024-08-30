@@ -52,7 +52,7 @@ app.post('/api/submit-airports', async (req, res) => {
     console.log(durationLimit)
 
     // combine the two with starting at the beginning
-    const allSelectedCodes = [startingAirportCode, ...selectedCodes]
+    const allSelectedCodes = [startingAirportCode, ...selectedCodes, durationLimit]
     console.log(allSelectedCodes)
 
     if (!allSelectedCodes || !Array.isArray(allSelectedCodes)) {
