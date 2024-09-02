@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import MapComponent from '../components/MapComponent'; // Import the new MapComponent
-import './AirportPage.css'; // Import the updated CSS file
+import MapComponent from '../components/MapComponent';
+import './AirportPage.css';
 
 const AirportPage = () => {
     const [airports, setAirports] = useState([]);
