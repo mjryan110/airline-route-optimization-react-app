@@ -1,36 +1,38 @@
-// src/pages/MapComponent.js
-import React, { useEffect, useState } from 'react';
-import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
+import React, { useEffect } from 'react';
+import { MapContainer, TileLayer, Polyline, Circle, CircleMarker, Popup, useMap } from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 
-const containerStyle = {
-  width: '100%',
-  height: '500px',
+const MapWithBounds = ({ positions }) => {
+    const map = useMap();
+
+    useEffect(() => {
+        if (positions.length) {
+            const bounds = positions.reduce((bounds, pos) => bounds.extend(L.latLng(pos)), L.latLngBounds());
+            map.fitBounds(bounds);
+        }
+    }, [positions, map]);
+
+    return null;
 };
 
-const center = {
-  lat: 0, // Default center of the map (you can update it dynamically)
-  lng: 0,
-};
-
-const MapComponent = ({ selectedAirports }) => {
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY, // Add your API Key here
-  });
-
-  return isLoaded ? (
-    <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={2}>
-      {selectedAirports.map((airport, index) => (
-        <Marker
-          key={index}
-          position={{
-            lat: parseFloat(airport.latitude),
-            lng: parseFloat(airport.longitude),
-          }}
-          label={airport.code}
-        />
-      ))}
-    </GoogleMap>
-  ) : <div>Loading...</div>;
+const MapComponent = ({ center, polyline, circleCenter, circleRadius, markers }) => {
+    return (
+        <MapContainer center={center} zoom={5} scrollWheelZoom={false} style={{ height: '400px', width: '100%' }}>
+            <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            <Circle center={circleCenter} pathOptions={{ fillColor: 'blue' }} radius={circleRadius} />
+            {markers.map((marker, index) => (
+                <CircleMarker key={index} center={marker.position} pathOptions={{ color: 'red' }} radius={20}>
+                    <Popup>{marker.label}</Popup>
+                </CircleMarker>
+            ))}
+            <Polyline pathOptions={{ color: 'black' }} positions={polyline} />
+            <MapWithBounds positions={polyline} />
+        </MapContainer>
+    );
 };
 
 export default MapComponent;

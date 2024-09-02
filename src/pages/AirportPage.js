@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import MapComponent from '../components/MapComponent'; // Import the new MapComponent
 import './AirportPage.css'; // Import the updated CSS file
 
 const AirportPage = () => {
@@ -73,6 +74,18 @@ const AirportPage = () => {
         setDurationLimit('');
     };
 
+    const center = [29.98, -95.3414]; // Houston coordinates
+    const polyline = [
+        [29.98, -95.3414], // Houston
+        [37.6189, -122.375], // San Francisco
+        [32.89, -97.038], // Dallas
+    ];
+
+    const markers = [
+        { position: [37.6189, -122.375], label: 'San Francisco' },
+        { position: [32.89, -97.038], label: 'Dallas' }
+    ];
+
     return (
         <div className="airport-page-container">
             <h1 className="page-title">Airport Data</h1>
@@ -116,24 +129,6 @@ const AirportPage = () => {
                 </div>
             </div>
 
-            {startingAirportCode && (
-                <div className="info-section">
-                    <h3 className="info-title">Starting Airport:</h3>
-                    <p>{startingAirportCode}</p>
-                </div>
-            )}
-
-            {selectedCodes.length > 0 && (
-                <div className="info-section">
-                    <h3 className="info-title">Selected Airport Codes:</h3>
-                    <ul className="code-list">
-                        {selectedCodes.map((code, index) => (
-                            <li key={index} className="code-item">{code}</li>
-                        ))}
-                    </ul>
-                </div>
-            )}
-
             {result && (
                 <div className="results-section">
                     <h2 className="info-title">Selected Route Details:</h2>
@@ -142,6 +137,15 @@ const AirportPage = () => {
                     <p><strong>Total Duration:</strong> {result.total_duration}</p>
                 </div>
             )}
+
+            {/* Render Map with Polyline and CircleMarkers */}
+            <MapComponent
+                center={center}
+                polyline={polyline}
+                circleCenter={center}
+                circleRadius={20000}
+                markers={markers}
+            />
 
             <table className="airport-table">
                 <thead>
