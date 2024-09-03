@@ -10,6 +10,11 @@ const AirportPage = () => {
     const [result, setResult] = useState(null);
     const [startingAirportCode, setStartingAirportCode] = useState('');
     const [durationLimit, setDurationLimit] = useState(null);
+    const [polyline, setPolyline] = useState([]);
+    const [markers, setMarkers] = useState([]);
+    const [center, setCenter] = useState([0,0]); // default center for initial render
+
+
 
     useEffect(() => {
         const fetchAirportData = async () => {
@@ -54,11 +59,26 @@ const AirportPage = () => {
                 });
 
                 const result = await response.json();
+                console.log(result.route)
+                console.log(result.coordinates);
 
                 if (result.error) {
                     console.error('Error:', result.error);
                 } else {
                     setResult(result);
+
+                    // dynamically create polyline and markers
+                    const polyline = result.coordinates.map(coord => [coord.latitude, coord.longitude]);
+                    console.log('polyline', polyline)
+                    const markers = result.coordinates.map(coord => ({
+                        position: [coord.latitude, coord.longitude],
+                        label: coord.code
+                    }));
+                    const center = [result.coordinates[0].latitude, result.coordinates[0].longitude];
+
+                    setPolyline(polyline);
+                    setMarkers(markers);
+                    setCenter(center);
                 }
             } catch (error) {
                 console.error('Error submitting airport codes:', error);
@@ -73,18 +93,6 @@ const AirportPage = () => {
         setResult(null);
         setDurationLimit('');
     };
-
-    const center = [29.98, -95.3414]; // Houston coordinates
-    const polyline = [
-        [29.98, -95.3414], // Houston
-        [37.6189, -122.375], // San Francisco
-        [32.89, -97.038], // Dallas
-    ];
-
-    const markers = [
-        { position: [37.6189, -122.375], label: 'San Francisco' },
-        { position: [32.89, -97.038], label: 'Dallas' }
-    ];
 
     return (
         <div className="airport-page-container">
@@ -135,17 +143,18 @@ const AirportPage = () => {
                     <p><strong>Route:</strong> {result.route.join(' → ')}</p>
                     <p><strong>Total Value:</strong> {result.total_value}</p>
                     <p><strong>Total Duration:</strong> {result.total_duration}</p>
+
+                    {/* Pass coordinates to the MapComponent */}
+                    <MapComponent
+                        center={center} // or calculate dynamic center based on coordinates
+                        polyline={polyline}
+                        circleCenter={center} // or set to first airport in coordinates
+                        circleRadius={10}
+                        markers={markers}
+                    />
                 </div>
             )}
 
-            {/* Render Map with Polyline and CircleMarkers */}
-            <MapComponent
-                center={center}
-                polyline={polyline}
-                circleCenter={center}
-                circleRadius={20000}
-                markers={markers}
-            />
 
             <table className="airport-table">
                 <thead>

@@ -25,7 +25,7 @@ const MapComponent = ({ center, polyline, circleCenter, circleRadius, markers })
             />
             <Circle center={circleCenter} pathOptions={{ fillColor: 'blue' }} radius={circleRadius} />
             {markers.map((marker, index) => (
-                <CircleMarker key={index} center={marker.position} pathOptions={{ color: 'red' }} radius={20}>
+                <CircleMarker key={index} center={marker.position} pathOptions={{ color: 'red' }} radius={10}>
                     <Popup>{marker.label}</Popup>
                 </CircleMarker>
             ))}

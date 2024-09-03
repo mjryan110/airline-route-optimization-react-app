@@ -78,13 +78,52 @@ app.post('/api/submit-airports', async (req, res) => {
         });
 
         // Handle when the python script process exits
-        pythonProcess.on('close', (code) => {
+        pythonProcess.on('close', async (code) => {
             console.log(`Python script exited with code ${code}`);
 
             try {
                 const result = JSON.parse(scriptOutput);
-                res.json(result);
-                console.log('result:', result)
+
+                const routeAirportCodes = result.route.flat();
+                console.log(routeAirportCodes)
+
+                // query neo4j for lat/long
+                const session = driver.session();
+                const query = `
+                        MATCH (a:Airport)
+                        WHERE a.code IN $codes
+                        RETURN a.code AS code, a.latitude AS latitude, a.longitude AS longitude
+                        `;
+                
+                const neo4jResult = await session.run(query, { codes: routeAirportCodes });
+                session.close();
+                console.log('neo4jResults:', neo4jResult)
+
+                // Build the list of airport coordinates
+                // const coordinates = neo4jResult.records.map(record => ({
+                //     code: record.get('code'),
+                //     latitude: record.get('latitude'),
+                //     longitude: record.get('longitude')
+                // }));
+                const coordinatesMap = new Map();
+                neo4jResult.records.forEach(record => {
+                    coordinatesMap.set(record.get('code'), {
+                        latitude: record.get('latitude'),
+                        longitude: record.get('longitude')
+                    });
+                });
+
+                //Reorder the coordinates to match the routeAirportCodes order
+                const coordinates = routeAirportCodes.map(code => coordinatesMap.get(code));
+
+                console.log('coordinates:', coordinates)
+
+                res.json({
+                    ...result,
+                    coordinates: coordinates
+                });
+
+                console.log('results from python script:', result)
             } catch (error) {
                 console.error('Error parsing Python script output:', error);
                 res.status(500).send('Internal Server Error');
