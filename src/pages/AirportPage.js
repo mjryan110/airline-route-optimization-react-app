@@ -136,6 +136,32 @@ const AirportPage = () => {
                     <button onClick={handleClear} className="action-button">Clear</button>
                 </div>
             </div>
+            <div>
+                <h3>
+                Starting Airport:
+                </h3>
+                    <p>
+                        {startingAirportCode}
+                    </p>
+            </div>
+            <div>
+                <h3>
+                    Added Airports:
+                </h3>
+                <ul className="code-list">
+                        {selectedCodes.map((code, index) => (
+                            <li key={index} className="code-item">{code}</li>
+                        ))}
+                </ul>
+            </div>
+            <div>
+                <h3>
+                    Hours Available:
+                </h3>
+                    <p>
+                        {durationLimit}
+                    </p>
+            </div>
 
             {result && (
                 <div className="results-section">
