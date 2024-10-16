@@ -137,17 +137,13 @@ const AirportPage = () => {
                 </div>
             </div>
             <div>
-                <h3>
-                Starting Airport:
-                </h3>
+                <h3>Starting Airport:</h3>
                     <p>
                         {startingAirportCode}
                     </p>
             </div>
             <div>
-                <h3>
-                    Added Airports:
-                </h3>
+                <h3>Added Airports:</h3>
                 <ul className="code-list">
                         {selectedCodes.map((code, index) => (
                             <li key={index} className="code-item">{code}</li>
@@ -155,9 +151,7 @@ const AirportPage = () => {
                 </ul>
             </div>
             <div>
-                <h3>
-                    Hours Available:
-                </h3>
+                <h3>Hours Available:</h3>
                     <p>
                         {durationLimit}
                     </p>
